@@ -1,0 +1,51 @@
+# Ambiente Virtual
+# Ignora a pasta do ambiente virtual criada pelo Poetry
+# (geralmente .venv na raiz do projeto)
+.venv/
+# Para ambientes virtuais criados manualmente em outras localizações
+/venv/
+/env/
+
+# Arquivos de Cache e Build
+# Ignora o cache de bytecode do Python
+__pycache__/
+# Ignora arquivos compilados (.pyc)
+*.pyc
+
+# Arquivos de Log e Dados
+# Arquivos de log gerados pela aplicação
+*.log
+
+# Bancos de Dados
+# Ignora arquivos de banco de dados locais, como SQLite
+# (Se você usar MySQL, pode ignorar esta linha)
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache de Ferramentas
+# Cache do Pytest para testes
+.pytest_cache/
+# Cache do Mypy para tipagem estática
+.mypy_cache/
+# Cache do Ruff para linting
+.ruff_cache/
+
+# Configurações de Ambiente
+# IGNORA O ARQUIVO DE VARIÁVEIS DE AMBIENTE SENSÍVEIS!
+# NUNCA COMMITAR ESTE ARQUIVO.
+.env
+# É uma boa prática commitar um arquivo de exemplo para referência
+# .env.example
+
+# Configurações da IDE
+# Ignora a pasta de cache do VS Code
+.vscode-server/
+# Ignora configurações de usuário do VS Code, mas não a pasta toda.
+# O arquivo launch.json (configuração de debug) deve ser comitado.
+.vscode/settings.json
+.vscode/extensions.json
+
+# Alembic
+# O diretório de versões deve ser comitado.
+# Mas, se houver arquivos de cache ou temporários, adicione aqui.

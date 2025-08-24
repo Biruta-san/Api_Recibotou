@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: FastAPI Server",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["app.main:app", "--reload"],
+      "pythonPath": "C:\\Users\\Ryanzera\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\Local\\pypoetry\\Cache\\virtualenvs\\recibotou-5frWxoy--py3.12\\Scripts\\python.exe",
+      "jinja": true,
+      "justMyCode": true,
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "Launch Edge to Docs",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://127.0.0.1:8000/docs",
+      "webRoot": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "FastAPI & Edge",
+      "configurations": ["Python: FastAPI Server", "Launch Edge to Docs"],
+      "stopAll": true
+    }
+  ]
+}

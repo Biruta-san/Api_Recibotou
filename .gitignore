@@ -42,10 +42,10 @@ __pycache__/
 # Ignora a pasta de cache do VS Code
 .vscode-server/
 # Ignora configurações de usuário do VS Code, mas não a pasta toda.
-# O arquivo launch.json (configuração de debug) deve ser comitado.
 .vscode/settings.json
 .vscode/extensions.json
 .vscode/launch.json
+
 # Alembic
 # O diretório de versões deve ser comitado.
 # Mas, se houver arquivos de cache ou temporários, adicione aqui.

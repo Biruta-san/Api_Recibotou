@@ -15,3 +15,7 @@ class UserOut(UserBase):
 
   class Config:
     from_attributes = True # pydantic v2
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str

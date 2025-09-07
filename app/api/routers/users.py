@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from app.api.deps import get_db
+from app.api.deps import get_db, get_current_user
 from app.crud.user import user as crud_user
+from app.models.user import User
 from app.schemas.user import UserCreate, UserOut, UserUpdate
 from app.utils.responses import success_response, error_response
 from app.utils.responses import ResponseModel
@@ -36,7 +37,7 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
 Obtém os dados de um usuário específico pelo ID.
 """
 @router.get("/{user_id}", response_model=ResponseModel[UserOut])
-def read_user(user_id: int, db: Session = Depends(get_db)):
+def read_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Busca o usuário no banco de dados
     obj = crud_user.get(db, user_id)
     
@@ -59,7 +60,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 Atualiza os dados de um usuário.
 """
 @router.patch("/{user_id}", response_model=ResponseModel[UserOut])
-def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Busca o usuário a ser atualizado
     obj = crud_user.get(db, user_id)
     
@@ -82,7 +83,7 @@ def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)
 Remove um usuário do sistema.
 """
 @router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[UserOut])
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Tenta remover o usuário
     obj = crud_user.remove(db, user_id)
     

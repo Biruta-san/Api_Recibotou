@@ -7,7 +7,7 @@
       "request": "launch",
       "module": "uvicorn",
       "args": ["app.main:app", "--reload"],
-      "pythonPath": "Localizacao_ambiente_virtual_python",
+      "pythonPath": "C:\\Users\\Ryanzera\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\Local\\pypoetry\\Cache\\virtualenvs\\recibotou-5frWxoy--py3.12\\Scripts\\python.exe",
       "jinja": true,
       "justMyCode": true,
       "envFile": "${workspaceFolder}/.env"

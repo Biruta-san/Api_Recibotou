@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
+from app.core.security import get_password_hash
 
 class CRUDUser:
   def get(self, db: Session, id: int) -> User | None:
@@ -12,7 +13,7 @@ class CRUDUser:
 
 
   def create(self, db: Session, obj_in: UserCreate) -> User:
-    db_obj = User(email=obj_in.email, full_name=obj_in.full_name, password=obj_in.password)
+    db_obj = User(email=obj_in.email, full_name=obj_in.full_name, password=get_password_hash(obj_in.password))
     db.add(db_obj)
     db.commit()
     db.refresh(db_obj)

@@ -13,15 +13,15 @@ class CRUDUser:
 
   def create(self, db: Session, obj_in: UserCreate) -> User:
     db_obj = User(
-      email=obj_in.email, 
-      full_name=obj_in.full_name, 
+      email=obj_in.email,
+      full_name=obj_in.full_name,
       password=get_password_hash(obj_in.password),
       phone_number=obj_in.phone_number,
       birthdate=obj_in.birthdate,
       profession=obj_in.profession,
       address=obj_in.address,
       city=obj_in.city,
-      )
+    )
     db.add(db_obj)
     db.commit()
     db.refresh(db_obj)

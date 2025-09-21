@@ -23,5 +23,5 @@ class UserOut(UserBase):
     from_attributes = True
 
 class LoginRequest(BaseModel):
-    email: str
-    password: str
+  email: str
+  password: str

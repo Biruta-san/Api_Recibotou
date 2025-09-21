@@ -11,7 +11,7 @@ class CRUDEntryType:
 
   def create(self, db: Session, obj_in: EntryTypeCreate) -> EntryType:
     db_obj = EntryType(
-      name=obj_in.name,
+        name=obj_in.name,
     )
     db.add(db_obj)
     db.commit()
@@ -32,6 +32,5 @@ class CRUDEntryType:
       db.delete(obj)
       db.commit()
     return obj
-
 
 entry_type = CRUDEntryType()

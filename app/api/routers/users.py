@@ -82,7 +82,7 @@ def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)
 """
 Remove um usuário do sistema.
 """
-@router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[UserOut])
+@router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[None])
 def delete_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Tenta remover o usuário
     obj = crud_user.remove(db, user_id)

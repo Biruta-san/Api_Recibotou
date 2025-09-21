@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.routers import users, health, auth, images
-
+from app.api.routers import users, health, auth, images, entry_type
 
 app = FastAPI(
   title=settings.PROJECT_NAME,
@@ -10,7 +9,6 @@ app = FastAPI(
   docs_url="/docs", # Swagger UI
   redoc_url="/redoc", # ReDoc
 )
-
 
 app.add_middleware(
   CORSMiddleware,
@@ -24,3 +22,4 @@ app.include_router(health.router, prefix=settings.API_V1_STR)
 app.include_router(users.router, prefix=settings.API_V1_STR)
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(images.router, prefix=settings.API_V1_STR)
+app.include_router(entry_type.router, prefix=settings.API_V1_STR)

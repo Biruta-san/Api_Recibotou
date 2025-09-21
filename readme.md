@@ -64,3 +64,7 @@ Para facilitar o desenvolvimento, você pode utilizar os comandos do Makefile:
 - Atualizar o banco de dados: alembic upgrade head
 - Criar migration: alembic revision -m "nome_migration" --autogenerate
 - Testes: pytest -q
+
+## 6) Configurar debug
+- Execute o comando: poetry env info --executable
+- Pegue o resultado desse comando e coloque no arquivo .vscode/launch.json em pythonPath

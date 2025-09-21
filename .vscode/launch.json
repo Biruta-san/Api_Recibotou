@@ -7,7 +7,8 @@
       "request": "launch",
       "module": "uvicorn",
       "args": ["app.main:app", "--reload"],
-      "pythonPath": "C:\\Users\\Ryanzera\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\Local\\pypoetry\\Cache\\virtualenvs\\recibotou-5frWxoy--py3.12\\Scripts\\python.exe",
+      // "pythonPath": "C:\\Users\\Ryanzera\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\LocalCache\\Local\\pypoetry\\Cache\\virtualenvs\\recibotou-5frWxoy--py3.12\\Scripts\\python.exe",
+      "pythonPath": "/home/codespace/.cache/pypoetry/virtualenvs/recibotou-GTEXuBpV-py3.12/bin/python",
       "jinja": true,
       "justMyCode": true,
       "envFile": "${workspaceFolder}/.env"

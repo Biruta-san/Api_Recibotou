@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 class Token(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
+  access_token: str
+  token_type: str = "bearer"
 
 class TokenData(BaseModel):
-    sub: int | None = None
+  sub: int | None = None

@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
 class EntryTypeBase(BaseModel):
-    name: str
+  name: str
 
 class EntryTypeCreate(EntryTypeBase):
-    pass
+  pass
 
 class EntryTypeUpdate(EntryTypeBase):
-    pass
+  pass
 
 class EntryTypeOut(EntryTypeBase):
-    id: int
+  id: int
 
-    class Config:
-        from_attributes = True
+  class Config:
+    from_attributes = True

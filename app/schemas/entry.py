@@ -1,0 +1,34 @@
+from pydantic import BaseModel
+from datetime import date
+
+class EntryBase(BaseModel):
+  title: str
+  entry_date: date
+  description: str
+  value: float
+  entry_type_id: int
+
+class EntryCreate(EntryBase):
+  pass
+
+class EntryUpdate(EntryBase):
+  pass
+
+class EntryOut(EntryBase):
+  id: int
+  entry_type_name: str
+
+  class Config:
+    from_attributes = True
+
+  @classmethod
+  def from_orm(cls, obj):
+    return cls.model_validate({
+      "id": obj.id,
+      "title": obj.title,
+      "entry_date": obj.entry_date,
+      "description": obj.description,
+      "value": obj.value,
+      "entry_type_id": obj.entry_type_id,
+      "entry_type_name": obj.entry_type.name if obj.entry_type else None
+    })

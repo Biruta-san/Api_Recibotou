@@ -1,8 +1,14 @@
 from pydantic import BaseModel, EmailStr
+from datetime import date
 
 class UserBase(BaseModel):
   email: EmailStr
   full_name: str
+  phone_number: str
+  birthdate: date
+  profession: str
+  address: str
+  city: str
 
 class UserCreate(UserBase):
   password: str
@@ -14,7 +20,7 @@ class UserOut(UserBase):
   id: int
 
   class Config:
-    from_attributes = True # pydantic v2
+    from_attributes = True
 
 class LoginRequest(BaseModel):
     email: str

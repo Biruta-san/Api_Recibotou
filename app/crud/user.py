@@ -11,9 +11,17 @@ class CRUDUser:
   def get_by_email(self, db: Session, email: str) -> User | None:
     return db.query(User).filter(User.email == email).first()
 
-
   def create(self, db: Session, obj_in: UserCreate) -> User:
-    db_obj = User(email=obj_in.email, full_name=obj_in.full_name, password=get_password_hash(obj_in.password))
+    db_obj = User(
+      email=obj_in.email, 
+      full_name=obj_in.full_name, 
+      password=get_password_hash(obj_in.password),
+      phone_number=obj_in.phone_number,
+      birthdate=obj_in.birthdate,
+      profession=obj_in.profession,
+      address=obj_in.address,
+      city=obj_in.city,
+      )
     db.add(db_obj)
     db.commit()
     db.refresh(db_obj)
@@ -23,6 +31,11 @@ class CRUDUser:
   def update(self, db: Session, db_obj: User, obj_in: UserUpdate) -> User:
     db_obj.full_name = obj_in.full_name
     db_obj.email = obj_in.email
+    db_obj.phone_number = obj_in.phone_number
+    db_obj.birthdate = obj_in.birthdate
+    db_obj.profession = obj_in.profession
+    db_obj.address = obj_in.address
+    db_obj.city = obj_in.city
 
     db.add(db_obj)
     db.commit()

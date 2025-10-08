@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.routers import users, health, auth, images, entry_type, entry
+from app.api.routers import auth, entry, images, receipts
 
 app = FastAPI(
   title=settings.PROJECT_NAME,
@@ -24,3 +25,4 @@ app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(images.router, prefix=settings.API_V1_STR)
 app.include_router(entry_type.router, prefix=settings.API_V1_STR)
 app.include_router(entry.router, prefix=settings.API_V1_STR)
+app.include_router(receipts.router, prefix=settings.API_V1_STR)

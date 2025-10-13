@@ -47,6 +47,28 @@ def update_entry_type(entry_id: int, entry_in: EntryUpdate, db: Session = Depend
   )
 
 """
+Obtém os dados de um tipo de lançamento específico pelo ID.
+"""
+@router.get("/{entry_id}", response_model=ResponseModel[EntryOut])
+def read_entry_type(entry_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+  # Busca o tipo de lançamento no banco de dados
+  obj = crud_entry.get(db, entry_id)
+
+  # Se o tipo de lançamento não for encontrado, retorna um erro padronizado
+  if not obj:
+    return error_response(
+      error="Entry not found",
+      message="Lançamento não encontrado.",
+      status_code=status.HTTP_404_NOT_FOUND
+    )
+
+  # Retorna os dados do tipo de lançamento em uma resposta de sucesso
+  return success_response(
+      data=EntryOut.from_orm(obj).model_dump(mode="json"),
+      message="Lançamento encontrado com sucesso."
+  )
+
+"""
 Obtém os dados de todos os tipos de lançamento.
 """
 @router.get("/", response_model=ResponseModel[list[EntryOut]])
@@ -87,24 +109,3 @@ def read_entry_types(
       message="Lançamentos encontrados com sucesso."
   )
 
-"""
-Obtém os dados de um tipo de lançamento específico pelo ID.
-"""
-@router.get("/{entry_id}", response_model=ResponseModel[EntryOut])
-def read_entry_type(entry_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-  # Busca o tipo de lançamento no banco de dados
-  obj = crud_entry.get(db, entry_id)
-
-  # Se o tipo de lançamento não for encontrado, retorna um erro padronizado
-  if not obj:
-    return error_response(
-      error="Entry not found",
-      message="Lançamento não encontrado.",
-      status_code=status.HTTP_404_NOT_FOUND
-    )
-
-  # Retorna os dados do tipo de lançamento em uma resposta de sucesso
-  return success_response(
-      data=EntryOut.from_orm(obj).model_dump(mode="json"),
-      message="Lançamento encontrado com sucesso."
-  )

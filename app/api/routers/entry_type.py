@@ -90,11 +90,11 @@ def read_entry_types(db: Session = Depends(get_db), current_user: User = Depends
   )
 
 """
-Remove um usuário do sistema.
+Remove um tipo de lançamento do sistema.
 """
 @router.delete("/{entry_type_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[None])
 def delete_user(entry_type_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-  # Tenta remover o usuário
+  # Tenta remover o tipo de lançamento
   obj = crud_entry_type.remove(db, entry_type_id)
 
   if entry_type_id in [TipoLancamento.DESPESA, TipoLancamento.RECEITA]:

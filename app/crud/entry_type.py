@@ -25,7 +25,6 @@ class CRUDEntryType:
     db.refresh(db_obj)
     return db_obj
 
-
   def remove(self, db: Session, id: int) -> EntryType | None:
     obj = self.get(db, id)
     if obj:

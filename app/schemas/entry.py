@@ -7,6 +7,7 @@ class EntryBase(BaseModel):
   description: str
   value: float
   entry_type_id: int
+  category_id: int
 
 class EntryCreate(EntryBase):
   pass
@@ -16,7 +17,8 @@ class EntryUpdate(EntryBase):
 
 class EntryOut(EntryBase):
   id: int
-  entry_type_name: str
+  entry_type_name: str | None
+  category_name: str | None
 
   class Config:
     from_attributes = True
@@ -30,5 +32,6 @@ class EntryOut(EntryBase):
       "description": obj.description,
       "value": obj.value,
       "entry_type_id": obj.entry_type_id,
-      "entry_type_name": obj.entry_type.name if obj.entry_type else None
+      "entry_type_name": obj.entry_type.name if obj.entry_type else None,
+      "category_name": obj.category.name if obj.category else None
     })

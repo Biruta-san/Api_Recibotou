@@ -17,3 +17,4 @@ class User(Base):
   city: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
   goals: Mapped[list["Goal"]] = relationship(back_populates="user")
+  entries: Mapped[list["Entry"]] = relationship(back_populates="user")

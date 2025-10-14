@@ -1,12 +1,26 @@
 import easyocr
+from pydantic import BaseModel
 from fastapi import APIRouter, File, UploadFile, HTTPException
 import numpy as np
 import cv2
-from app.schemas import ExtractedData, BoundingBox, OCRItem, OCRResponse
 
 router = APIRouter(tags=["images"])
 
 reader = easyocr.Reader(['pt'])
+
+class BoundingBox(BaseModel):
+  x_min: int
+  y_min: int
+  x_max: int
+  y_max: int
+
+class OCRItem(BaseModel):
+  text: str
+  confidence: float
+  bounding_box: BoundingBox
+
+class OCRResponse(BaseModel):
+  data: list[OCRItem]
 
 @router.post("/ocr", response_model=OCRResponse, summary="Extrai texto de uma imagem usando EasyOCR.")
 async def perform_ocr(file: UploadFile = File(...)):

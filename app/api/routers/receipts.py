@@ -4,23 +4,23 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.schemas.entry import EntryOut 
+from app.schemas.entry import EntryOut
 from app.api.services import receipt_service
 from app.models.user import User
-from app.api.deps import get_current_active_user 
+from app.api.deps import get_current_user
 
 router = APIRouter(prefix="/receipts", tags=["Receipts"])
 
 @router.post(
-    "/upload", 
-    response_model=EntryOut, 
+    "/upload",
+    response_model=EntryOut,
     status_code=status.HTTP_201_CREATED,
     summary="Processa um recibo e cria um lançamento"
 )
 async def upload_and_process_receipt(
     *,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user),
     file: UploadFile = File(...)
 ):
     """

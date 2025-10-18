@@ -7,7 +7,7 @@ class CRUDEntryType:
     return db.get(EntryType, id)
 
   def get_many(self, db: Session):
-    return db.query(EntryType).all()
+    return db.query(EntryType).order_by(EntryType.name).all()
 
   def create(self, db: Session, obj_in: EntryTypeCreate) -> EntryType:
     db_obj = EntryType(

@@ -1,9 +1,6 @@
 from sqlalchemy import String, ForeignKey, Numeric, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
-from app.models.entry_type import EntryType
-from app.models.category import Category
-from app.models.user import User
 from datetime import date
 from decimal import Decimal
 

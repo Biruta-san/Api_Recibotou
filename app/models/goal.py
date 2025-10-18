@@ -2,8 +2,6 @@ from app.db.base import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import SmallInteger, ForeignKey, CheckConstraint, Index, Numeric
 from sqlalchemy.dialects.mysql import YEAR
-from app.models.user import User
-from app.models.category import Category
 from decimal import Decimal
 
 class Goal(Base):

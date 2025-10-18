@@ -7,7 +7,7 @@ class CRUDCategory:
     return db.get(Category, id)
 
   def get_many(self, db: Session):
-    return db.query(Category).all()
+    return db.query(Category).order_by(Category.name).all()
 
   def create(self, db: Session, obj_in: CategoryCreate) -> Category:
     db_obj = Category(

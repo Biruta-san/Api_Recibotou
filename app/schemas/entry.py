@@ -4,7 +4,7 @@ from datetime import date
 class EntryBase(BaseModel):
   title: str
   entry_date: date
-  description: str
+  description: str | None = None
   value: float
   entry_type_id: int
   category_id: int

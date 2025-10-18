@@ -10,7 +10,7 @@ class Entry(Base):
   id: Mapped[int] = mapped_column(primary_key=True, index=True)
   title: Mapped[str] = mapped_column(String(100), nullable=False)
   entry_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
-  description: Mapped[str] = mapped_column(String(500), nullable=False)
+  description: Mapped[str] = mapped_column(String(500), nullable=True)
   value: Mapped[Decimal] = mapped_column(Numeric(18, 6), nullable=False)
   entry_type_id: Mapped[int] = mapped_column(ForeignKey("entry_types.id"), nullable=False, index=True)
   category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False, index=True)

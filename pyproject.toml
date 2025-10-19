@@ -21,7 +21,8 @@ dependencies = [
     "loguru (>=0.7.3,<0.8.0)",
     "pymysql (>=1.1.1,<2.0.0)",
     "easyocr (>=1.7.2,<2.0.0)",
-    "opencv-python-headless (>=4.12.0.88,<5.0.0.0)"
+    "opencv-python-headless (>=4.12.0.88,<5.0.0.0)",
+    "python-dotenv (>=1.0.0,<2.0.0)"
 ]
 
 

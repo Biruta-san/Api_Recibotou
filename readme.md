@@ -2,20 +2,29 @@
 
 Stack: FastAPI (documentação automática Swagger/OpenAPI), SQLAlchemy 2.x (ORM), Alembic (migrações de banco de dados), Pydantic v2 (esquemas de dados), Uvicorn (servidor ASGI) e Poetry (gerenciamento de dependências).
 
-## 1) Requisitos Mínimos
+## Requisitos Mínimos
 - Python 3.11+: Requisito essencial para o ambiente de execução.
 - MySQL 8.0+: O banco de dados a ser usado. Certifique-se de que o servidor MySQL esteja instalado e rodando localmente.
 - Poetry: Ferramenta para gerenciar as dependências do projeto. Você pode instalá-lo com pipx install poetry.
+- Docker: Ferramenta para gerenciamento de containers
 
-## 2) Instalação
+## Rodando com Docker
+Primeiro é necessário criar uma cópia do arquivo .env.example e renomea-lo para .env
+Depois, dentro do arquivo .env, altere a variavel SQLALCHEMY_DATABASE_URI para o endereço de conexão do seu banco, depois realize a substituição das demais variaveis caso deseje
+
+Depois de configurado o ambiente é necessário realizar a build do docker com o comando:
+```
+docker build -t recibotou .
+```
+
+Agora basta inicializar a aplicação com o comando:
+```
+docker run --rm -p 8000:8000 --env-file .env -it recibotou
+```
+
+## Rodando Localmente
+### 2) Instalação
 Siga estes passos para configurar e executar o projeto na sua máquina local:
-
-Instale o pipx
-
-```
-python -m pip install --user pipx
-python -m pipx ensurepath
-```
 
 instale o poetry
 ```

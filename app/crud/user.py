@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, encrypt_data
+import secrets
+from datetime import datetime, timedelta
+from app.core.config import settings
 
 class CRUDUser:
   def get(self, db: Session, id: int) -> User | None:
@@ -50,5 +53,16 @@ class CRUDUser:
       db.commit()
     return obj
 
+  def set_passchange_token(self, db: Session, db_obj: User) -> User | None:
+    secret = secrets.token_hex(3).upper()
+    expires = datetime.now() + timedelta(minutes=5)
+
+    db_obj.pass_change_token = encrypt_data(secret)
+    db_obj.pass_change_expire = expires
+
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
 
 user = CRUDUser()

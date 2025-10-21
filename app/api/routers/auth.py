@@ -31,3 +31,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     message="Login bem-sucedido.",
     status_code=status.HTTP_200_OK
   )
+
+@router.post("/changePassword/{mail}", response_model=ResponseModel[None])
+def changePassword(mail: str, db: Session = Depends(get_db)):
+  pass

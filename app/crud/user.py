@@ -86,5 +86,14 @@ class CRUDUser:
       return True
     return False
 
+  def update_profile_image(self, db: Session, db_obj: User, image_data: bytes, image_name: str, image_type: str) -> User:
+    db_obj.profile_image = image_data
+    db_obj.profile_image_name = image_name
+    db_obj.profile_image_type = image_type
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
+
 
 user = CRUDUser()

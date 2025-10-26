@@ -33,7 +33,7 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     status_code=status.HTTP_200_OK
   )
 
-@router.post("/requestPasswordReset", response_model=ResponseModel[None])
+@router.post("/request_password_reset", response_model=ResponseModel[None])
 async def request_password_reset(
   request: RequestResetPasswordRequest,
   background_tasks: BackgroundTasks,
@@ -59,7 +59,7 @@ async def request_password_reset(
     status_code=status.HTTP_200_OK
   )
 
-@router.post("/resetPassword", response_model=ResponseModel[None])
+@router.post("/reset_password", response_model=ResponseModel[None])
 async def reset_password(
   request: ResetPasswordRequest,
   db: Session = Depends(get_db),

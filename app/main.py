@@ -11,10 +11,12 @@ app = FastAPI(
   redoc_url="/redoc", # ReDoc
 )
 
+from app.core.logger_config import logger
+
 # Redireciona '/' para '/docs'
 @app.get("/", include_in_schema=False)
 async def root():
-    return RedirectResponse(url="/docs")
+  return RedirectResponse(url="/docs")
 
 app.add_middleware(
   CORSMiddleware,

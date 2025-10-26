@@ -13,8 +13,16 @@ class Settings(BaseSettings):
 
   # CORS
   BACKEND_CORS_ORIGINS: list[str] = ["*"]
+  SMTP_SERVER: str | None = None
+  SMTP_PORT: int | None = None
+  SMTP_USERNAME: str | None = None
+  SMTP_PASSWORD: str | None = None
+  SMTP_FROM: str | None = None
+
+  API_HOST: str = "0.0.0.0"
+  API_PORT: int = 8000
+  APP_URL: str = "https://0.0.0.0:8000"
 
   model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
-
 
 settings = Settings()

@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, UploadFile, File
+from fastapi.responses import StreamingResponse
+from io import BytesIO
 from sqlalchemy.orm import Session
 from app.api.deps import get_db, get_current_user
 from app.crud.user import user as crud_user
@@ -21,6 +23,14 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     return error_response(
       error="Email already registered",
       message="O e-mail fornecido já está em uso.",
+      status_code=status.HTTP_400_BAD_REQUEST
+    )
+
+  if user_in.phone_number and crud_user.get_by_phone(db, user_in.phone_number):
+    # Retorna uma resposta de erro padronizada
+    return error_response(
+      error="Phone already registered",
+      message="O telefone fornecido já está em uso.",
       status_code=status.HTTP_400_BAD_REQUEST
     )
 
@@ -99,3 +109,59 @@ def delete_user(user_id: int, db: Session = Depends(get_db), current_user: User 
   return success_response(
     message="Usuário removido com sucesso."
   )
+
+@router.patch("/{user_id}/profile_image", response_model=ResponseModel[UserOut])
+async def upload_profile_image(
+    user_id: int,
+    image: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+  obj = crud_user.get(db, user_id)
+
+  # Se não encontrar, retorna erro
+  if not obj:
+    return error_response(
+      error="User not found",
+      message="Usuário não encontrado para atualização.",
+      status_code=status.HTTP_404_NOT_FOUND
+    )
+
+  profile_image = await image.read()
+  updated_user = crud_user.update_profile_image(db, obj, profile_image, image.filename, image.content_type)
+
+  return success_response(
+    data=UserOut.from_orm(updated_user).model_dump(mode="json"),
+    message="Usuário atualizado com sucesso."
+  )
+
+
+@router.get("/{user_id}/profile_image")
+async def get_profile_image(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    download: bool = True
+):
+  user = crud_user.get(db, user_id)
+  if not user:
+      return error_response(
+          error="User not found",
+          message="Usuário não encontrado.",
+          status_code=status.HTTP_404_NOT_FOUND
+      )
+
+  disposition = "attachment" if download else "inline"
+
+  if not user.profile_image:
+      return error_response(
+          error="Profile image not found",
+          message="Imagem de perfil não encontrada.",
+          status_code=status.HTTP_404_NOT_FOUND
+      )
+
+  return StreamingResponse(
+    BytesIO(user.profile_image),
+    media_type=user.profile_image_type,
+    headers={"Content-Disposition": f"{disposition}; filename={user.profile_image_name}"}
+)

@@ -56,7 +56,7 @@ async def send_password_recovery_email(to_email: str, token: str, expire: dateti
     </head>
     <body>
       <div class="container">
-        <h2>Autenticação de Dois Fatores Recibotou</h2>
+        <h2>Recuperação de senha Recibotou</h2>
         <p>Olá,</p>
         <p>Use o código abaixo para acessar sua conta com segurança:</p>
 

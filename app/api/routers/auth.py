@@ -55,7 +55,7 @@ async def request_password_reset(
 
   return success_response(
     data=None,
-    message="Login bem-sucedido.",
+    message="E-mail de recuperação enviado com sucesso.",
     status_code=status.HTTP_200_OK
   )
 
@@ -64,7 +64,7 @@ async def reset_password(
   request: ResetPasswordRequest,
   db: Session = Depends(get_db),
 ):
-  if(request.new_password != request.confirm_password):
+  if request.new_password != request.confirm_password:
     return error_response(
       error="Password mismatch",
       message="As senhas não coincidem.",
@@ -82,7 +82,7 @@ async def reset_password(
 
   updated = crud_user.verify_token_and_update_password(db=db, db_obj=db_user, new_password=request.new_password, token=request.token)
 
-  if(not updated):
+  if not updated:
     return error_response(
       error="Invalid or expired token",
       message="Token inválido ou expirado.",

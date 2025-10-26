@@ -153,6 +153,13 @@ async def get_profile_image(
 
   disposition = "attachment" if download else "inline"
 
+  if not user.profile_image:
+      return error_response(
+          error="Profile image not found",
+          message="Imagem de perfil não encontrada.",
+          status_code=status.HTTP_404_NOT_FOUND
+      )
+
   return StreamingResponse(
     BytesIO(user.profile_image),
     media_type=user.profile_image_type,

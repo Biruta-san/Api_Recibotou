@@ -136,7 +136,7 @@ async def upload_profile_image(
   )
 
 
-@router.get("/{user_id}/profile_image", response_model=ResponseModel[UserOut])
+@router.get("/{user_id}/profile_image")
 async def get_profile_image(
     user_id: int,
     db: Session = Depends(get_db),

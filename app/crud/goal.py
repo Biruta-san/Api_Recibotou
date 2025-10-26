@@ -63,4 +63,24 @@ class CRUDGoal:
       db.commit()
     return obj
 
-category = CRUDGoal()
+  def get_goal_by_data(
+      self,
+      db: Session,
+      month: int,
+      year: int,
+      user_id: int,
+      category_id: Optional[int] = None,
+  ) -> Goal | None:
+    query = db.query(Goal).filter(
+      Goal.month == month,
+      Goal.year == year,
+      Goal.user_id == user_id)
+
+    if category_id is not None:
+      query = query.filter(Goal.category_id == category_id)
+    else:
+      query = query.filter(Goal.category_id.is_(None))
+
+    return query.first()
+
+goal = CRUDGoal()

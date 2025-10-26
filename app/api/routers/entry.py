@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends, status, Query
 from app.utils.responses import success_response, error_response, ResponseModel
 from app.schemas.entry import EntryOut, EntryCreate, EntryUpdate
+from app.schemas.notification import NotificationCreate
 from app.api.deps import get_db, get_current_user
 from sqlalchemy.orm import Session
 from app.crud.entry import entry as crud_entry
+from app.crud.goal import goal as crud_goal
+from app.crud.notification import notification as crud_notification
 from app.models.user import User
 from datetime import date
 from typing import Optional
@@ -15,11 +18,74 @@ Cria um novo lançamento financeiro.
 """
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[EntryOut])
 def create_entry(entry_in: EntryCreate, db: Session = Depends(get_db)):
-  # Cria o Tipo de lançamento no banco de dados e retorna
-  entry_type = crud_entry.create(db, entry_in)
+  # Cria o Lançamento no banco de dados e retorna
+  entry = crud_entry.create(db, entry_in)
+
+  if not entry:
+    return error_response(
+      error="Entry creation failed",
+      message="Falha ao criar o lançamento.",
+      status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
+
+  general_goal = crud_goal.get_goal_by_data(
+    db,
+    month=entry.entry_date.month,
+    year=entry.entry_date.year,
+    user_id=entry_in.user_id
+  )
+
+  category_goal = None
+
+  if(entry_in.category_id):
+    category_goal = crud_goal.get_goal_by_data(
+      db,
+      month=entry.entry_date.month,
+      year=entry.entry_date.year,
+      user_id=entry_in.user_id,
+      category_id=entry_in.category_id
+    )
+
+  if general_goal:
+    total_entries_value = crud_entry.get_sum_by_period(
+      db,
+      month=entry.entry_date.month,
+      year=entry.entry_date.year,
+      user_id=entry_in.user_id
+    )
+
+    if total_entries_value > general_goal.value:
+      crud_notification.create(
+        db,
+        NotificationCreate(
+          title="Meta Geral Atingida",
+          description=f"Você atingiu sua meta geral de {general_goal.value} com um total de entradas de {total_entries_value}.",
+          user_id=entry_in.user_id
+        )
+      )
+
+  if category_goal:
+    total_category_entries_value = crud_entry.get_sum_by_period(
+      db,
+      month=entry.entry_date.month,
+      year=entry.entry_date.year,
+      user_id=entry_in.user_id,
+      category_id=entry_in.category_id
+    )
+
+    if total_category_entries_value > category_goal.value:
+      crud_notification.create(
+        db,
+        NotificationCreate(
+          title="Meta por Categoria Atingida",
+          description=f"Você atingiu sua meta de {category_goal.value} para a categoria com um total de entradas de {total_category_entries_value}.",
+          user_id=entry_in.user_id
+        )
+      )
+
   return success_response(
-    data=EntryOut.from_orm(entry_type).model_dump(mode="json"),
-    message="Tipo de lançamento criado com sucesso.",
+    data=EntryOut.from_orm(entry).model_dump(mode="json"),
+    message="Lançamento criado com sucesso.",
     status_code=status.HTTP_201_CREATED
   )
 
@@ -41,6 +107,69 @@ def update_entry_type(entry_id: int, entry_in: EntryUpdate, db: Session = Depend
 
   # Atualiza o lançamento e retorna os novos dados
   updated_entry = crud_entry.update(db, obj, entry_in)
+
+  if not updated_entry:
+    return error_response(
+      error="Error updating entry",
+      message="Falha ao atualizar o lançamento.",
+      status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
+
+  general_goal = crud_goal.get_goal_by_data(
+    db,
+    month=updated_entry.entry_date.month,
+    year=updated_entry.entry_date.year,
+    user_id=entry_in.user_id
+  )
+
+  category_goal = None
+
+  if(entry_in.category_id):
+    category_goal = crud_goal.get_goal_by_data(
+      db,
+      month=updated_entry.entry_date.month,
+      year=updated_entry.entry_date.year,
+      user_id=entry_in.user_id,
+      category_id=entry_in.category_id
+    )
+
+  if general_goal:
+    total_entries_value = crud_entry.get_sum_by_period(
+      db,
+      month=updated_entry.entry_date.month,
+      year=updated_entry.entry_date.year,
+      user_id=entry_in.user_id
+    )
+
+    if total_entries_value > general_goal.value:
+      crud_notification.create(
+        db,
+        NotificationCreate(
+          title="Meta Geral Atingida",
+          description=f"Você atingiu sua meta geral de {general_goal.value} com um total de entradas de {total_entries_value}.",
+          user_id=entry_in.user_id
+        )
+      )
+
+  if category_goal:
+    total_category_entries_value = crud_entry.get_sum_by_period(
+      db,
+      month=updated_entry.entry_date.month,
+      year=updated_entry.entry_date.year,
+      user_id=entry_in.user_id,
+      category_id=entry_in.category_id
+    )
+
+    if total_category_entries_value > category_goal.value:
+      crud_notification.create(
+        db,
+        NotificationCreate(
+          title="Meta por Categoria Atingida",
+          description=f"Você atingiu sua meta de {category_goal.value} para a categoria com um total de entradas de {total_category_entries_value}.",
+          user_id=entry_in.user_id
+        )
+      )
+
   return success_response(
     data=EntryOut.from_orm(updated_entry).model_dump(mode="json"),
     message="Lançamento atualizado com sucesso."

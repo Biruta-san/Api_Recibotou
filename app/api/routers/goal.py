@@ -84,8 +84,8 @@ def read_goals(
       status_code=status.HTTP_400_BAD_REQUEST
     )
 
-  if((initial_month and initial_month < 1 or initial_month > 12) or
-     (final_month and final_month < 1 or final_month > 12)):
+  if((initial_month is not None and (initial_month < 1 or initial_month > 12)) or
+     (final_month is not None and (final_month < 1 or final_month > 12))):
     return error_response(
       error="Invalid month",
       message="Os meses devem estar entre 1 e 12.",
@@ -117,7 +117,7 @@ def read_goals(
         value=item.value,
         user_id=item.user_id,
         category_id=item.category_id,
-        user_name=item.user.name if item.user else None,
+        user_name=item.user.full_name if item.user else None,
         category_name=item.category.name if item.category else None
     ).model_dump(mode="json")
     for item in obj

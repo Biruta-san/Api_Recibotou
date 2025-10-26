@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from app.models.entry import Entry
-from app.models.user import User
 from app.schemas.entry import EntryCreate, EntryUpdate
 from datetime import date
 from typing import Optional
@@ -20,7 +19,6 @@ class CRUDEntry:
     query = db.query(Entry)
 
     if title:
-      # filtro case-insensitive
       query = query.filter(func.lower(Entry.title).like(f"%{title.lower()}%"))
 
     if start_date:
@@ -38,6 +36,8 @@ class CRUDEntry:
       description=obj_in.description,
       value=obj_in.value,
       entry_type_id=obj_in.entry_type_id,
+      category_id=obj_in.category_id,
+      user_id=obj_in.user_id,
     )
     db.add(db_obj)
     db.commit()
@@ -50,6 +50,8 @@ class CRUDEntry:
     db_obj.description = obj_in.description
     db_obj.value = obj_in.value
     db_obj.entry_type_id = obj_in.entry_type_id
+    db_obj.category_id = obj_in.category_id
+    db_obj.user_id = obj_in.user_id
 
     db.add(db_obj)
     db.commit()
@@ -62,5 +64,25 @@ class CRUDEntry:
       db.delete(obj)
       db.commit()
     return obj
+
+  def get_sum_by_period(
+    self,
+    db: Session,
+    month: int,
+    year: int,
+    user_id: int,
+    category_id: Optional[int] = None
+    ) -> float:
+
+    query = db.query(Entry).filter(
+      func.strftime("%m", Entry.entry_date) == f"{month:02d}",
+      func.strftime("%Y", Entry.entry_date) == f"{year:04d}",
+      Entry.user_id == user_id)
+
+    if category_id:
+      query = query.filter(Entry.category_id == category_id)
+
+    total = query.with_entities(func.sum(Entry.value)).scalar()
+    return total or 0.0
 
 entry = CRUDEntry()

@@ -24,6 +24,14 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
       status_code=status.HTTP_400_BAD_REQUEST
     )
 
+  if user_in.phone_number and crud_user.get_by_phone(db, user_in.phone_number):
+    # Retorna uma resposta de erro padronizada
+    return error_response(
+      error="Phone already registered",
+      message="O telefone fornecido já está em uso.",
+      status_code=status.HTTP_400_BAD_REQUEST
+    )
+
   # Cria o usuário e o retorna em uma resposta de sucesso
   user = crud_user.create(db, user_in)
   return success_response(

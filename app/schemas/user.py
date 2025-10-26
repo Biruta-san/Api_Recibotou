@@ -25,3 +25,12 @@ class UserOut(UserBase):
 class LoginRequest(BaseModel):
   email: str
   password: str
+
+class RequestResetPasswordRequest(BaseModel):
+  email: str
+
+class ResetPasswordRequest(BaseModel):
+  email: str
+  new_password: str
+  confirm_password: str
+  token: str

@@ -46,6 +46,10 @@ __pycache__/
 .vscode/extensions.json
 .vscode/launch.json
 
+# Ignora pastas de logging
+logs/
+*.log
+
 # Alembic
 # O diretório de versões deve ser comitado.
 # Mas, se houver arquivos de cache ou temporários, adicione aqui.

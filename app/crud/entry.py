@@ -4,6 +4,8 @@ from app.schemas.entry import EntryCreate, EntryUpdate
 from datetime import date
 from typing import Optional
 from sqlalchemy import func
+from app.utils.enum import TipoLancamento
+from decimal import Decimal
 
 class CRUDEntry:
   def get(self, db: Session, id: int) -> Entry | None:
@@ -15,6 +17,9 @@ class CRUDEntry:
     title: Optional[str] = None,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
+    user_id: Optional[int] = None,
+    category_id: Optional[int] = None,
+    entry_type_id: Optional[int] = None,
   ):
     query = db.query(Entry)
 
@@ -26,6 +31,15 @@ class CRUDEntry:
 
     if end_date:
       query = query.filter(Entry.entry_date <= end_date)
+
+    if user_id:
+      query = query.filter(Entry.user_id == user_id)
+
+    if category_id:
+      query = query.filter(Entry.category_id == category_id)
+
+    if entry_type_id:
+      query = query.filter(Entry.entry_type_id == entry_type_id)
 
     return query.all()
 
@@ -72,17 +86,18 @@ class CRUDEntry:
     year: int,
     user_id: int,
     category_id: Optional[int] = None
-    ) -> float:
+    ) -> Decimal:
 
     query = db.query(Entry).filter(
-      func.strftime("%m", Entry.entry_date) == f"{month:02d}",
-      func.strftime("%Y", Entry.entry_date) == f"{year:04d}",
+      func.month(Entry.entry_date) == month,
+      func.year(Entry.entry_date) == year,
+      Entry.entry_type_id == TipoLancamento.DESPESA,
       Entry.user_id == user_id)
 
-    if category_id:
+    if category_id is not None:
       query = query.filter(Entry.category_id == category_id)
 
     total = query.with_entities(func.sum(Entry.value)).scalar()
-    return total or 0.0
+    return Decimal(total or 0.0)
 
 entry = CRUDEntry()

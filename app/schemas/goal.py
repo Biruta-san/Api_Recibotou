@@ -13,6 +13,15 @@ class GoalCreate(GoalBase):
 class GoalUpdate(GoalBase):
   pass
 
+class GoalValuesOut(BaseModel):
+  month: int
+  year: int
+  total_value: float
+  consumed_percentage: float
+  consumed_value: float
+  left_percentage: float
+  left_value: float
+
 class GoalOut(GoalBase):
   id: int
   user_name: str | None = None

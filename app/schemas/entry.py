@@ -35,6 +35,8 @@ class EntryOut(EntryBase):
       "value": obj.value,
       "entry_type_id": obj.entry_type_id,
       "entry_type_name": obj.entry_type.name if obj.entry_type else None,
+      "category_id": obj.category_id,
       "category_name": obj.category.name if obj.category else None,
+      "user_id": obj.user_id,
       "user_name": obj.user.full_name if obj.user else None,
     })

@@ -62,9 +62,8 @@ def mark_notification_as_read(notification_id: int, db: Session = Depends(get_db
     )
 
   # Atualiza a notificação e retorna os novos dados
-  updated_notification = crud_notification.update(db, obj, notification_in)
   return success_response(
-    data=NotificationOut.from_orm(updated_notification).model_dump(mode="json"),
+    data=NotificationOut.from_orm(obj).model_dump(mode="json"),
     message="Notificação atualizada com sucesso."
   )
 
@@ -136,3 +135,24 @@ def read_notifications(
       message="Notificações encontradas com sucesso."
   )
 
+"""
+Remove uma notificação do sistema.
+"""
+@router.delete("/{notification_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[None])
+def delete_notification(notification_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+  # Tenta remover a notificação
+  obj = crud_notification.remove(db, notification_id)
+
+
+  # Se o objeto não foi encontrado para remoção, retorna erro
+  if not obj:
+    return error_response(
+      error="Notification not found",
+      message="Notificação não encontrada para exclusão.",
+      status_code=status.HTTP_404_NOT_FOUND
+    )
+
+  # Retorna uma mensagem de sucesso, sem dados adicionais
+  return success_response(
+    message="Notificação removida com sucesso."
+  )

@@ -59,7 +59,7 @@ def create_entry(entry_in: EntryCreate, db: Session = Depends(get_db)):
         db,
         NotificationCreate(
           title="Meta Geral Atingida",
-          description=f"Você atingiu sua meta geral de {general_goal.value} com um total de entradas de {total_entries_value}.",
+          message=f"Você atingiu sua meta geral de {general_goal.value:.2f} com um total de entradas de {total_entries_value:.2f}.",
           user_id=entry_in.user_id
         )
       )
@@ -78,7 +78,7 @@ def create_entry(entry_in: EntryCreate, db: Session = Depends(get_db)):
         db,
         NotificationCreate(
           title="Meta por Categoria Atingida",
-          description=f"Você atingiu sua meta de {category_goal.value} para a categoria com um total de entradas de {total_category_entries_value}.",
+          message=f"Você atingiu sua meta de {category_goal.value:.2f} para a categoria com um total de entradas de {total_category_entries_value:.2f}.",
           user_id=entry_in.user_id
         )
       )
@@ -146,7 +146,7 @@ def update_entry_type(entry_id: int, entry_in: EntryUpdate, db: Session = Depend
         db,
         NotificationCreate(
           title="Meta Geral Atingida",
-          description=f"Você atingiu sua meta geral de {general_goal.value} com um total de entradas de {total_entries_value}.",
+          message=f"Você atingiu sua meta geral de {general_goal.value:.2f} com um total de entradas de {total_entries_value:.2f}.",
           user_id=entry_in.user_id
         )
       )
@@ -165,7 +165,7 @@ def update_entry_type(entry_id: int, entry_in: EntryUpdate, db: Session = Depend
         db,
         NotificationCreate(
           title="Meta por Categoria Atingida",
-          description=f"Você atingiu sua meta de {category_goal.value} para a categoria com um total de entradas de {total_category_entries_value}.",
+          message=f"Você atingiu sua meta de {category_goal.value:.2f} para a categoria com um total de entradas de {total_category_entries_value:.2f}.",
           user_id=entry_in.user_id
         )
       )
@@ -206,10 +206,21 @@ def read_entry_types(
     current_user: User = Depends(get_current_user),
     title: Optional[str] = Query(None, description="Filtro pelo título (case-insensitive)"),
     start_date: Optional[date] = Query(None, description="Data inicial do filtro"),
-    end_date: Optional[date] = Query(None, description="Data final do filtro")
+    end_date: Optional[date] = Query(None, description="Data final do filtro"),
+    user_id: Optional[int] = Query(None, description="Filtro pelo ID do usuário"),
+    category_id: Optional[int] = Query(None, description="Filtro pelo ID da categoria"),
+    entry_type_id: Optional[int] = Query(None, description="Filtro pelo ID do tipo de lançamento"),
   ):
   # Busca o tipo de lançamento no banco de dados
-  obj = crud_entry.get_many(db, title=title, start_date=start_date, end_date=end_date)
+  obj = crud_entry.get_many(
+    db,
+    title=title,
+    start_date=start_date,
+    end_date=end_date,
+    user_id=user_id,
+    category_id=category_id,
+    entry_type_id=entry_type_id
+)
 
   # Se o tipo de lançamento não for encontrado, retorna um erro padronizado
   if not obj:
@@ -227,7 +238,11 @@ def read_entry_types(
         description=item.description,
         value=item.value,
         entry_type_id=item.entry_type_id,
-        entry_type_name=item.entry_type.name if item.entry_type else None
+        entry_type_name=item.entry_type.name if item.entry_type else None,
+        category_id=item.category_id,
+        category_name=item.category.name if item.category else None,
+        user_id=item.user_id,
+        user_name=item.user.full_name if item.user else None,
     ).model_dump(mode="json")  # garante que date seja serializável
     for item in obj
   ]
@@ -238,3 +253,24 @@ def read_entry_types(
       message="Lançamentos encontrados com sucesso."
   )
 
+"""
+Remove um lançamento do sistema.
+"""
+@router.delete("/{entry_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[None])
+def delete_entry(entry_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+  # Tenta remover o lançamento
+  obj = crud_entry.remove(db, entry_id)
+
+
+  # Se o objeto não foi encontrado para remoção, retorna erro
+  if not obj:
+    return error_response(
+      error="Entry not found",
+      message="Lançamento não encontrado para exclusão.",
+      status_code=status.HTTP_404_NOT_FOUND
+    )
+
+  # Retorna uma mensagem de sucesso, sem dados adicionais
+  return success_response(
+    message="Lançamento removido com sucesso."
+  )

@@ -13,6 +13,15 @@ class GoalCreate(GoalBase):
 class GoalUpdate(GoalBase):
   pass
 
+class GoalValuesOut(BaseModel):
+  month: int
+  year: int
+  total_value: float
+  consumed_percentage: float
+  consumed_value: float
+  left_percentage: float
+  left_value: float
+
 class GoalOut(GoalBase):
   id: int
   user_name: str | None = None
@@ -31,7 +40,7 @@ class GoalOut(GoalBase):
       "value": obj.value,
       "user_id": obj.user_id,
       "category_id": obj.category_id,
-      "user_name": obj.user.name if obj.user else None,
+      "user_name": obj.user.full_name if obj.user else None,
       "category_name": obj.category.name if obj.category else None
     })
 

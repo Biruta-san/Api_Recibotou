@@ -1,4 +1,4 @@
-from sqlalchemy import String, Date, DateTime, LargeBinary
+from sqlalchemy import String, Date, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 from datetime import date, datetime
@@ -26,3 +26,4 @@ class User(Base):
 
   goals: Mapped[list["Goal"]] = relationship(back_populates="user")
   entries: Mapped[list["Entry"]] = relationship(back_populates="user")
+  notifications: Mapped[list["Notification"]] = relationship(back_populates="user")

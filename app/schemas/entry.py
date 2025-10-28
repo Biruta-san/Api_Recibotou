@@ -4,9 +4,11 @@ from datetime import date
 class EntryBase(BaseModel):
   title: str
   entry_date: date
-  description: str
+  description: str | None = None
   value: float
   entry_type_id: int
+  category_id: int
+  user_id: int
 
 class EntryCreate(EntryBase):
   pass
@@ -16,7 +18,9 @@ class EntryUpdate(EntryBase):
 
 class EntryOut(EntryBase):
   id: int
-  entry_type_name: str
+  entry_type_name: str | None
+  category_name: str | None
+  user_name: str | None
 
   class Config:
     from_attributes = True
@@ -30,5 +34,9 @@ class EntryOut(EntryBase):
       "description": obj.description,
       "value": obj.value,
       "entry_type_id": obj.entry_type_id,
-      "entry_type_name": obj.entry_type.name if obj.entry_type else None
+      "entry_type_name": obj.entry_type.name if obj.entry_type else None,
+      "category_id": obj.category_id,
+      "category_name": obj.category.name if obj.category else None,
+      "user_id": obj.user_id,
+      "user_name": obj.user.full_name if obj.user else None,
     })

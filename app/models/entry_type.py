@@ -8,5 +8,4 @@ class EntryType(Base):
   id: Mapped[int] = mapped_column(primary_key=True, index=True)
   name: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
 
-  # relação inversa
   entries: Mapped[list["Entry"]] = relationship(back_populates="entry_type")

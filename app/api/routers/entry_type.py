@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from app.api.deps import get_db, get_current_active_user
+from app.api.deps import get_db, get_current_user
 from app.crud.entry_type import entry_type as crud_entry_type
 from app.models.user import User
 from app.schemas.entry_type import EntryTypeCreate, EntryTypeOut, EntryTypeUpdate
@@ -26,7 +26,7 @@ def create_entry_type(entry_type_in: EntryTypeCreate, db: Session = Depends(get_
 Atualiza os dados de um tipo de lançamento.
 """
 @router.patch("/{entry_type_id}", response_model=ResponseModel[EntryTypeOut])
-def update_entry_type(entry_type_id: int, entry_type_in: EntryTypeUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+def update_entry_type(entry_type_id: int, entry_type_in: EntryTypeUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   # Busca o lançamento a ser atualizado
   obj = crud_entry_type.get(db, entry_type_id)
 
@@ -49,7 +49,7 @@ def update_entry_type(entry_type_id: int, entry_type_in: EntryTypeUpdate, db: Se
 Obtém os dados de um tipo de lançamento específico pelo ID.
 """
 @router.get("/{entry_type_id}", response_model=ResponseModel[EntryTypeOut])
-def read_entry_type(entry_type_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+def read_entry_type(entry_type_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   # Busca o tipo de lançamento no banco de dados
   obj = crud_entry_type.get(db, entry_type_id)
 
@@ -71,7 +71,7 @@ def read_entry_type(entry_type_id: int, db: Session = Depends(get_db), current_u
 Obtém os dados de todos os tipos de lançamento.
 """
 @router.get("/", response_model=ResponseModel[list[EntryTypeOut]])
-def read_entry_types(db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
+def read_entry_types(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   # Busca o tipo de lançamento no banco de dados
   obj = crud_entry_type.get_many(db)
 
@@ -94,12 +94,17 @@ Remove um tipo de lançamento do sistema.
 """
 @router.delete("/{entry_type_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[None])
 <<<<<<< HEAD
+<<<<<<< HEAD
 def delete_user(entry_type_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)):
   # Tenta remover o usuário
 =======
 def delete_user(entry_type_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   # Tenta remover o tipo de lançamento
 >>>>>>> origin/main
+=======
+def delete_user(entry_type_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+  # Tenta remover o tipo de lançamento
+>>>>>>> 7dc122e3ab86853868dc347cecc7855854553682
   obj = crud_entry_type.remove(db, entry_type_id)
 
   if entry_type_id in [TipoLancamento.DESPESA, TipoLancamento.RECEITA]:

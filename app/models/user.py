@@ -2,6 +2,7 @@
 # app/models/user.py (Versão Corrigida)
 
 from sqlalchemy import String, Date
+<<<<<<< HEAD
 # <-- CORREÇÃO 1: Adicionar 'relationship' à importação
 from sqlalchemy.orm import Mapped, mapped_column, relationship 
 from app.db.base import Base
@@ -18,10 +19,16 @@ from app.db.base import Base
 from datetime import date, datetime
 from sqlalchemy.dialects.mysql import MEDIUMBLOB
 >>>>>>> origin/main
+=======
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.db.base import Base
+from datetime import date
+>>>>>>> 7dc122e3ab86853868dc347cecc7855854553682
 
 class User(Base):
-    __tablename__ = "users"
+  __tablename__ = "users"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
@@ -36,6 +43,8 @@ class User(Base):
     # <-- CORREÇÃO 2: Usar 'relationship()' em vez de 'mapped_column()'
     entries: Mapped[List["Entry"]] = relationship(back_populates="owner")
 =======
+=======
+>>>>>>> 7dc122e3ab86853868dc347cecc7855854553682
   id: Mapped[int] = mapped_column(primary_key=True, index=True)
   email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
   full_name: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -55,5 +64,8 @@ class User(Base):
 
   goals: Mapped[list["Goal"]] = relationship(back_populates="user")
   entries: Mapped[list["Entry"]] = relationship(back_populates="user")
+<<<<<<< HEAD
   notifications: Mapped[list["Notification"]] = relationship(back_populates="user")
 >>>>>>> origin/main
+=======
+>>>>>>> 7dc122e3ab86853868dc347cecc7855854553682

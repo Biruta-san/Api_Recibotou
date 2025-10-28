@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class Entry(Base):
-    __tablename__ = "entries"
+  __tablename__ = "entries"
 
   id: Mapped[int] = mapped_column(primary_key=True, index=True)
   title: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -23,3 +23,8 @@ class Entry(Base):
   entry_type_id: Mapped[int] = mapped_column(ForeignKey("entry_types.id"), nullable=False, index=True)
 
   entry_type: Mapped["EntryType"] = relationship(back_populates="entries")
+<<<<<<< HEAD
+=======
+  category: Mapped["Category"] = relationship(back_populates="entries")
+  user: Mapped["User"] = relationship(back_populates="entries")
+>>>>>>> 7dc122e3ab86853868dc347cecc7855854553682

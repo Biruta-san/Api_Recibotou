@@ -16,12 +16,12 @@ async def perform_ocr(file: UploadFile = File(...)):
 
     try:
         contents = await file.read()
-        
+
         ocr_results = ocr_service.extract_text_from_image_content(contents)
-        
+
         return {"data": ocr_results}
 
-    except ValueError as e: 
+    except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=f"Erro interno ao processar a imagem: {str(e)}")

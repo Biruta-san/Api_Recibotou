@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from io import BytesIO
 >>>>>>> origin/main
 from sqlalchemy.orm import Session
-from app.api.deps import get_db, get_current_active_user # A importação está correta!
+from app.api.deps import get_db, get_current_user # A importação está correta!
 from app.crud.user import user as crud_user
 from app.models.user import User
 from app.schemas.user import UserCreate, UserOut, UserUpdate
@@ -53,9 +53,9 @@ Obtém os dados de um usuário específico pelo ID. (Precisa de login).
 """
 @router.get("/{user_id}", response_model=ResponseModel[UserOut])
 def read_user(
-    user_id: int, 
-    db: Session = Depends(get_db), 
-    current_user: User = Depends(get_current_active_user) # <-- CORREÇÃO AQUI
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user) # <-- CORREÇÃO AQUI
 ):
   obj = crud_user.get(db, user_id)
   if not obj:
@@ -74,10 +74,10 @@ Atualiza os dados de um usuário. (Precisa de login).
 """
 @router.patch("/{user_id}", response_model=ResponseModel[UserOut])
 def update_user(
-    user_id: int, 
-    user_in: UserUpdate, 
-    db: Session = Depends(get_db), 
-    current_user: User = Depends(get_current_active_user) # <-- CORREÇÃO AQUI
+    user_id: int,
+    user_in: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user) # <-- CORREÇÃO AQUI
 ):
   obj = crud_user.get(db, user_id)
   if not obj:
@@ -86,7 +86,7 @@ def update_user(
       message="Usuário não encontrado para atualização.",
       status_code=status.HTTP_404_NOT_FOUND
     )
-  
+
   # LÓGICA DE AUTORIZAÇÃO (Importante para o futuro!)
   # Garante que um usuário só possa editar a si mesmo (a menos que seja um admin)
   # if obj.id != current_user.id:
@@ -103,9 +103,9 @@ Remove um usuário do sistema. (Precisa de login).
 """
 @router.delete("/{user_id}", status_code=status.HTTP_200_OK, response_model=ResponseModel[None])
 def delete_user(
-    user_id: int, 
-    db: Session = Depends(get_db), 
-    current_user: User = Depends(get_current_active_user) # <-- CORREÇÃO AQUI
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user) # <-- CORREÇÃO AQUI
 ):
   obj = crud_user.remove(db, user_id)
   if not obj:
@@ -116,6 +116,7 @@ def delete_user(
     )
   return success_response(
     message="Usuário removido com sucesso."
+<<<<<<< HEAD
 <<<<<<< HEAD
   )
 =======
@@ -177,3 +178,6 @@ async def get_profile_image(
     headers={"Content-Disposition": f"{disposition}; filename={user.profile_image_name}"}
 )
 >>>>>>> origin/main
+=======
+  )
+>>>>>>> 7dc122e3ab86853868dc347cecc7855854553682

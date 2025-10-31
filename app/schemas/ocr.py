@@ -1,5 +1,3 @@
-# app/schemas/ocr.py
-
 from pydantic import BaseModel
 
 # Define a estrutura da caixa delimitadora de cada texto detectado

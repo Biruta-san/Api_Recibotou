@@ -26,8 +26,8 @@ app.add_middleware(
   allow_headers=["*"],
 )
 
-app.include_router(users.router, prefix=settings.API_V1_STR)
 app.include_router(health.router, prefix=settings.API_V1_STR)
+app.include_router(users.router, prefix=settings.API_V1_STR)
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(images.router, prefix=settings.API_V1_STR)
 app.include_router(entry_type.router, prefix=settings.API_V1_STR)

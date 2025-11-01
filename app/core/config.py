@@ -11,6 +11,8 @@ class Settings(BaseSettings):
   )
   ENCODING_ALGORITHM: str = "HS256"
 
+  GOOGLE_API_KEY: str | None = None
+
   # CORS
   BACKEND_CORS_ORIGINS: list[str] = ["*"]
   SMTP_SERVER: str | None = None

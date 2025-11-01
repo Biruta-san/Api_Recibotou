@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.routers import users, health, auth, images, entry_type, entry, category, goal, notification
+from app.api.routers import users, health, auth, images, entry_type, entry, category, goal, notification, receipts, analysis, chat
 
 app = FastAPI(
   title=settings.PROJECT_NAME,
@@ -35,3 +35,6 @@ app.include_router(entry.router, prefix=settings.API_V1_STR)
 app.include_router(category.router, prefix=settings.API_V1_STR)
 app.include_router(goal.router, prefix=settings.API_V1_STR)
 app.include_router(notification.router, prefix=settings.API_V1_STR)
+app.include_router(receipts.router, prefix=settings.API_V1_STR)
+app.include_router(analysis.router, prefix=settings.API_V1_STR)
+app.include_router(chat.router, prefix=settings.API_V1_STR)

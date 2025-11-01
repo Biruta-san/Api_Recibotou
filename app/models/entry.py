@@ -1,5 +1,3 @@
-# app/models/entry.py (VERSÃO FINAL RESOLVIDA E COMPLETA)
-
 from sqlalchemy import String, ForeignKey, Numeric, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
@@ -16,9 +14,6 @@ class Entry(Base):
   value: Mapped[Decimal] = mapped_column(Numeric(18, 6), nullable=False)
   entry_type_id: Mapped[int] = mapped_column(ForeignKey("entry_types.id"), nullable=False, index=True)
   category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=False, index=True)
-  user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
-  entry_type_id: Mapped[int] = mapped_column(ForeignKey("entry_types.id"), nullable=False, index=True)
-  category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=True, index=True)
   user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
 
   entry_type: Mapped["EntryType"] = relationship(back_populates="entries")

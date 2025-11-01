@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from datetime import date
 from app.api.deps import get_db, get_current_user
@@ -10,10 +10,10 @@ router = APIRouter(prefix="/analysis", tags=["Analysis"])
 
 @router.get("/monthly_summary", response_model=ResponseModel[dict])
 async def get_monthly_summary(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-    year: int = date.today().year,
-    month: int = date.today().month,
+  db: Session = Depends(get_db),
+  current_user: User = Depends(get_current_user),
+  year: int = date.today().year,
+  month: int = date.today().month,
 ):
   """
   Retorna o resumo financeiro (Receitas, Despesas, Saldo) para o mês/ano especificados.
@@ -26,14 +26,13 @@ async def get_monthly_summary(
       year=year,
       month=month
     )
-
     return success_response(
       data=summary,
       message=f"Resumo para {month}/{year} calculado com sucesso."
     )
   except Exception as e:
-    # Em caso de erro na lógica do serviço, retornamos um 500
-    raise HTTPException(
-        status_code=500,
-        detail=f"Erro interno ao calcular o resumo: {e}"
+     return error_response(
+      error="Error on analysis monthly summary",
+      message="Erro ao calcular o resumo mensal: " + str(e),
+      status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
     )

@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
-from typing import Dict
+from typing import Dict, List, Tuple
 from app.crud.entry import entry as crud_entry
+from app.models.entry import Entry
 from app.utils.enum import TipoLancamento
 
-def get_entries_for_month(db: Session, user_id: int, month: int, year: int) -> (List[Entry], List[Entry]):
+def get_entries_for_month(db: Session, user_id: int, month: int, year: int) -> Tuple[List[Entry], List[Entry]]:
   """Busca receitas e despesas para um mês/ano específicos de um usuário."""
   start_date = date(year, month, 1)
   # Lógica para achar o último dia do mês de forma segura

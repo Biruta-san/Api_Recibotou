@@ -25,5 +25,6 @@ class User(Base):
   profile_image_type: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
   goals: Mapped[list["Goal"]] = relationship(back_populates="user")
+  auths: Mapped[list["UserAuth"]] = relationship(back_populates="user")
   entries: Mapped[list["Entry"]] = relationship(back_populates="user")
   notifications: Mapped[list["Notification"]] = relationship(back_populates="user")

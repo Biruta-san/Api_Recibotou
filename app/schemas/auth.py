@@ -14,7 +14,7 @@ class VerifierOut(BaseModel):
 class ResetPasswordRequest(BaseModel):
   email: str
 
-class ResetPasswordRequest(BaseModel):
+class FullFilResetPasswordRequest(BaseModel):
   email: str
   new_password: str
   confirm_password: str

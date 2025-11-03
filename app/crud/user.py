@@ -56,7 +56,12 @@ class CRUDUser:
       db.commit()
     return obj
 
-  async def generate_pass_recovery_token(self, db: Session, db_obj: User, background_tasks: BackgroundTasks) -> str:
+  async def generate_pass_recovery_token(
+    self,
+    db: Session,
+    db_obj: User,
+    background_tasks: BackgroundTasks
+  ) -> str:
     token = secrets.token_hex(3).upper()
     date_expiration = datetime.now() + timedelta(minutes=5)
 

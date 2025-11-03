@@ -6,3 +6,4 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
   sub: int | None = None
+

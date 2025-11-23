@@ -70,7 +70,7 @@ JSON RESULTADO:
 
 async def _extract_intent(question: str) -> dict | None:
   """Usa o Gemini para extrair a intenção e as entidades da pergunta do usuário."""
-  model = genai.GenerativeModel('gemini-1.5-flash')
+  model = genai.GenerativeModel('gemini-2.5-flash')
   prompt_completo = PROMPT_EXTRACAO_INTENCAO.replace("{{PERGUNTA_USUARIO}}", question)
 
   try:
@@ -208,7 +208,7 @@ async def ask_question(db: Session, user_id: int, question: str) -> str:
     prompt_final = f"Responda sempre em português do Brasil. A minha pergunta é: {question}"
 
   # 3. Gerar a resposta final com o Gemini
-  model = genai.GenerativeModel('gemini-1.5-flash')
+  model = genai.GenerativeModel('gemini-2.5-flash')
   response = await model.generate_content_async(prompt_final)
 
   return response.text

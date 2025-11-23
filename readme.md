@@ -2,78 +2,35 @@
 
 Stack: FastAPI (documentação automática Swagger/OpenAPI), SQLAlchemy 2.x (ORM), Alembic (migrações de banco de dados), Pydantic v2 (esquemas de dados), Uvicorn (servidor ASGI) e Poetry (gerenciamento de dependências).
 
-## Requisitos Mínimos
-- Python 3.11+: Requisito essencial para o ambiente de execução.
-- MySQL 8.0+: O banco de dados a ser usado. Certifique-se de que o servidor MySQL esteja instalado e rodando localmente.
-- Poetry: Ferramenta para gerenciar as dependências do projeto. Você pode instalá-lo com pipx install poetry.
-- Docker: Ferramenta para gerenciamento de containers
+## 1) Requisitos Mínimos
+- **Python 3.12 ou 3.13**: Requisito essencial. (Verifique com `py --list`).
+- **MySQL 8.0+**: O banco de dados a ser usado.
+- **Poetry**: Gerenciador de dependências.
+- **Docker**: (Opcional) Para rodar em containers.
 
-## Rodando com Docker
-Primeiro é necessário criar uma cópia do arquivo .env.example e renomea-lo para .env
-Depois, dentro do arquivo .env, altere a variavel SQLALCHEMY_DATABASE_URI para o endereço de conexão do seu banco, depois realize a substituição das demais variaveis caso deseje
+---
 
-Depois de configurado o ambiente é necessário realizar a build do docker com o comando:
-```
-docker build -t recibotou .
-```
+## 2) Rodando Localmente (Windows) - Passo a Passo Seguro
 
-Agora basta inicializar a aplicação com o comando:
-```
-docker run --rm -p 8000:8000 --env-file .env -it recibotou
-```
+Siga estes passos exatos para evitar erros de caminho ou versão no Windows.
 
-## Rodando Localmente
-### 2) Instalação
-Siga estes passos para configurar e executar o projeto na sua máquina local:
+### 2.1) Instalação e Ambiente
 
-instale o poetry
-```
-python -m pip install --user poetry
-```
+1. **Instale o Poetry** (usando o módulo do Python para evitar erros de PATH):
+   ```powershell
+   python -m pip install --user poetry
 
-Instale as dependências com Poetry
-```
-poetry install
-```
-Este comando lerá o arquivo pyproject.toml e instalará todas as dependências necessárias, incluindo as do grupo de desenvolvimento.
+python -m poetry env use python
 
-### 3) Configuração
-Variáveis de Ambiente
-Crie um arquivo .env na raiz do projeto, seguindo o exemplo do arquivo .env.example
+python -m poetry install --no-root
 
-## 4) Execução
-Inicialize a sessão do Poetry
-```
-poetry env use python
-poetry env activate
-```
+python -m poetry run alembic upgrade head
 
-rode o resultado do comando poetry env activate na sua linha de comando
+python -m poetry run uvicorn app.main:app --reload --port 8001
 
-Crie o banco de dados e aplique as migrações
-Primeiro, certifique-se de que o banco de dados minha_api (ou o nome que você definiu no .env) já existe no seu servidor MySQL local. Você pode criá-lo com um cliente MySQL.
-```
-alembic upgrade head
-```
+Acessando a API
+Após iniciar o servidor:
 
-Inicie o servidor da API
-```
-uvicorn app.main:app --reload
-```
-A API estará acessível em http://127.0.0.1:8000.
+Documentação Interativa (Swagger): http://127.0.0.1:8001/docs
 
-Documentação Interativa (Swagger UI): Acesse http://127.0.0.1:8000/docs para interagir com os endpoints da API.
-
-Documentação Alternativa (ReDoc): Acesse http://127.0.0.1:8000/redoc.
-
-## 5) Comandos Úteis
-Para facilitar o desenvolvimento, você pode utilizar os comandos do Makefile:
-
-- Rodar o projeto: uvicorn app.main:app --reload
-- Atualizar o banco de dados: alembic upgrade head
-- Criar migration: alembic revision -m "nome_migration" --autogenerate
-- Testes: pytest -q
-
-## 6) Configurar debug
-- Execute o comando: poetry env info --executable
-- Pegue o resultado desse comando e coloque no arquivo .vscode/launch.json em pythonPath
+Documentação Alternativa (ReDoc): http://127.0.0.1:8001/redoc

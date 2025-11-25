@@ -13,7 +13,7 @@ router = APIRouter(prefix="/entry_types", tags=["entry_types"])
 Cria um novo tipo de lançamento financeiro.
 """
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[EntryTypeOut])
-def create_entry_type(entry_type_in: EntryTypeCreate, db: Session = Depends(get_db)):
+def create_entry_type(entry_type_in: EntryTypeCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   # Cria o Tipo de lançamento no banco de dados e retorna
   entry_type = crud_entry_type.create(db, entry_type_in)
   return success_response(

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/categories", tags=["categories"])
 Cria uma nova categoria
 """
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[CategoryOut])
-def create_category(category_in: CategoryCreate, db: Session = Depends(get_db)):
+def create_category(category_in: CategoryCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   category = crud_category.create(db, category_in)
   return success_response(
     data=CategoryOut.from_orm(category).model_dump(),

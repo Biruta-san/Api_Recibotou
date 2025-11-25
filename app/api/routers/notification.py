@@ -14,7 +14,7 @@ router = APIRouter(prefix="/notifications", tags=["notifications"])
 Cria um novo notificação.
 """
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[NotificationOut])
-def create_notification(notification_in: NotificationCreate, db: Session = Depends(get_db)):
+def create_notification(notification_in: NotificationCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   notification_type = crud_notification.create(db, notification_in)
   return success_response(
     data=NotificationOut.from_orm(notification_type).model_dump(mode="json"),

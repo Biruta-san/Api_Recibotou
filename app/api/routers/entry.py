@@ -17,7 +17,7 @@ router = APIRouter(prefix="/entries", tags=["entries"])
 Cria um novo lançamento financeiro.
 """
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[EntryOut])
-def create_entry(entry_in: EntryCreate, db: Session = Depends(get_db)):
+def create_entry(entry_in: EntryCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   # Cria o Lançamento no banco de dados e retorna
   entry = crud_entry.create(db, entry_in)
 

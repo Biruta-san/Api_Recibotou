@@ -15,7 +15,7 @@ router = APIRouter(prefix="/goals", tags=["goals"])
 Cria uma nova meta
 """
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ResponseModel[GoalOut])
-def create_goal(goal_in: GoalCreate, db: Session = Depends(get_db)):
+def create_goal(goal_in: GoalCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
   if goal_in.value <= 0:
     return error_response(
       error="Invalid goal value",

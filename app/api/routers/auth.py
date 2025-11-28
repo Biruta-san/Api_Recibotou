@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from datetime import timedelta
-from app.schemas.token import Token
+from app.schemas.token import UserLogin
 from app.api.deps import get_db
 from app.crud.user import user as crud_user
 from app.core.security import verify_password, create_access_token
@@ -51,7 +51,7 @@ async def request_login(
 
 @router.post(
   "/login",
-  response_model=ResponseModel[Token]
+  response_model=ResponseModel[UserLogin]
 )
 def login(
   request: VerifyRequest,
@@ -85,7 +85,13 @@ def login(
   )
 
   return success_response(
-    data=Token(access_token=access_token, token_type="bearer"),
+    data=UserLogin(
+      access_token=access_token,
+      token_type="bearer",
+      user_id = db_user_auth.user.id,
+      user_name = db_user_auth.user.full_name,
+      user_email = db_user_auth.user.email
+    ),
     message="Login bem-sucedido.",
     status_code=status.HTTP_200_OK
   )

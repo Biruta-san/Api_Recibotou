@@ -140,7 +140,6 @@ async def upload_profile_image(
 async def get_profile_image(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
     download: bool = True
 ):
   user = crud_user.get(db, user_id)
